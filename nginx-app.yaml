@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-app
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nginx
+  source:
+    repoURL: https://github.com/DChuhin/argocd-practice.git
+    targetRevision: HEAD
+    path: nginx
+    directory:
+      recurse: true
+  syncPolicy:
+    automated:
+      prune: true # Удалять ресурсы, если они удалены из Git
+      selfHeal: true # Автоматически исправлять расхождения
+    syncOptions:
+      - CreateNamespace=true # Создать namespace, если его нет
